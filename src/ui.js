@@ -6,16 +6,6 @@ class Ui {
   constructor() {
     this.project_list = [];
     this.current_project = 0;
-    /*
-    this.getProject().addTask(
-      new Task("task1", "description1", "01/01/2025", "normal"),
-    );
-    this.getProject().addTask(
-      new Task("task2", "description2", "01/01/2025", "normal"),
-    );
-    this.getProject().addTask(
-      new Task("task3", "description3", "01/01/2025", "normal"),
-    );*/
 
     if (localStorage.getItem("projects")) {
       this.project_list = loadData();
@@ -24,22 +14,21 @@ class Ui {
     }
 
     if (this.project_list.length > 0) {
+      this.showProjects();
       this.showTasks(this.getProject());
     }
 
     const addButton = document.querySelector("#AddButton");
     addButton.addEventListener("click", this, false);
 
+    const addTaskBtn = document.querySelector("#AddTask");
+    addTaskBtn.addEventListener("click", this, false);
+
     const addProjButton = document.querySelector("#AddProject");
     addProjButton.addEventListener("click", this, false);
 
-    const saveButton = document.querySelector("#SaveBtn");
-    saveButton.addEventListener("click", this, false);
-
-    this.addProject("Project2");
-    this.getProject().addTask(
-      new Task("task1", "project2 description1", "01/01/2025", "normal"),
-    );
+    const closeButton = document.querySelector(".close");
+    closeButton.addEventListener("click", this, false);
   }
 
   saveData() {
@@ -50,10 +39,32 @@ class Ui {
     const project = new Project(name);
     this.project_list.push(project);
     this.current_project = this.project_list.length - 1;
+    this.showProjects();
+    this.saveData();
   }
 
   getProject() {
     return this.project_list[this.current_project];
+  }
+
+  showProjects() {
+    const projDisp = document.querySelector("#projects");
+    projDisp.innerHTML = "";
+
+    const projList = document.createElement("ul");
+    projDisp.appendChild(projList);
+
+    for (var i = 0; i < this.project_list.length; i++) {
+      const proj = document.createElement("li");
+      const projLink = document.createElement("a");
+      projLink.textContent = this.project_list[i].getName();
+      projLink.href = "#";
+      projLink.className = "ProjLink";
+      projLink.dataset.indexNumber = i;
+      projLink.addEventListener("click", this, false);
+      proj.appendChild(projLink);
+      projList.appendChild(proj);
+    }
   }
 
   showTasks() {
@@ -79,8 +90,9 @@ class Ui {
       dueDiv.textContent = taskList[i].getDueDate();
       const priorityDiv = document.createElement("div");
       priorityDiv.textContent = taskList[i].getPriority();
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "Delete";
+      const delBtn = document.createElement("a");
+      delBtn.textContent = "delete";
+      delBtn.className = "material-symbols-outlined";
       delBtn.id = "DeleteButton";
       delBtn.dataset.indexNumber = i;
       delBtn.addEventListener("click", this, false);
@@ -98,6 +110,16 @@ class Ui {
     const newDesc = document.querySelector("#task-description");
     const newDue = document.querySelector("#task-due");
     const newPriority = document.querySelector("#task-priority");
+    console.log(
+      "Adding name: " +
+        newName.value +
+        " desc: " +
+        newDesc.value +
+        " due: " +
+        newDue.value +
+        " priority: " +
+        newPriority.value,
+    );
     this.getProject().addTask(
       new Task(newName.value, newDesc.value, newDue.value, newPriority.value),
     );
@@ -105,25 +127,42 @@ class Ui {
     newDesc.value = "";
     newDue.value = "";
     newPriority.value = "Normal";
+    this.saveData();
   }
 
   handleEvent(event) {
     console.log("In handle event: " + event.target.id);
     switch (event.target.id) {
       case "AddButton":
+        //this.addTask();
+        var modal = document.getElementById("taskModal");
+        modal.style.display = "block";
+        break;
+      case "AddTask":
+        console.log("Adding task");
         this.addTask();
+        var modal = document.getElementById("taskModal");
+        modal.style.display = "none";
+        console.log("task added");
         break;
       case "DeleteButton":
         console.log("Delete task " + event.target.dataset.indexNumber);
         this.getProject().delTask(event.target.dataset.indexNumber);
+        this.saveData();
         break;
       case "AddProject":
         const newProject = document.querySelector("#project-input");
         this.addProject(newProject.value);
-        break;
-      case "SaveBtn":
         this.saveData();
         break;
+      default:
+        if (event.target.className === "ProjLink") {
+          this.current_project = event.target.dataset.indexNumber;
+          this.showTasks();
+        } else if (event.target.className === "close") {
+          var modal = document.getElementById("taskModal");
+          modal.style.display = "none";
+        }
     }
     this.showTasks();
   }

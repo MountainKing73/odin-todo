@@ -3,32 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
     <title>My ToDos</title>
   </head>
   <body>
-    <div id="task-container">
-      <div id="new-task">
-      <label for "task-input">Name</label>
-      <input type="text" id="task-input" placeholder="Add new task..." />
-      <label for "task-description">Description</label>
-      <input type="text" id="task-description" placeholder="" />
-      <label for "task-due">Due Date</label>
-      <input type="date" id="task-due" placeholder="01/01/2025" />
-      <label for "task-priority">Priority</label>
-        <select name="priority" id="task-priority">
-        <option value="High">High</option>
-        <option value="Normal" selected>Normal</option>
-        <option value="Low">Low</option>
-        </select>
-      </div>
-      <button id="AddButton">Add Task</button>
+    <div id="sidebar">
+      <h1>Projects</h1>
+      <div id="projects"></div>
       <div id="new-project">
-        <label for "project-input">Name</label>
-        <input type="text" id="project-input" placeholder="Add new project..." />
+        <input
+          type="text"
+          id="project-input"
+          placeholder="Add new project..."
+        />
       </div>
       <button id="AddProject">Add Project</button>
+    </div>
+    <div id="task-container">
+      <button id="AddButton">Add Task</button>
       <div id="tasks"></div>
-      <button id="SaveBtn">Save</button>
+    </div>
+    <div id="taskModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="new-task">
+          <label for="task-input">Name</label>
+          <input type="text" id="task-input" placeholder="Add new task..." />
+          <label for="task-description">Description</label>
+          <input type="text" id="task-description" placeholder="" />
+          <label for="task-due">Due Date</label>
+          <input type="date" id="task-due" placeholder="01/01/2025" />
+          <label for="task-priority">Priority</label>
+          <select name="priority" id="task-priority">
+            <option value="High">High</option>
+            <option value="Normal" selected>Normal</option>
+            <option value="Low">Low</option>
+          </select>
+          <button id="AddTask">Add Task</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
