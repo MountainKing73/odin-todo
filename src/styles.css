@@ -1,3 +1,18 @@
-body: {
-  background-color: green;
+body {
+  display: flex;
+}
+
+#new-task {
+  display: flex;
+  width: 100%;
+}
+
+#task-container {
+  width: 50%;
+  justify-content: center;
+}
+
+li {
+  display: flex;
+  justify-content: space-evenly;
 }
