@@ -8,6 +8,10 @@ class Project {
     this.taskList.push(task);
   }
 
+  delTask(index) {
+    this.taskList.splice(index, 1);
+  }
+
   getName() {
     return this.name;
   }

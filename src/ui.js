@@ -3,19 +3,23 @@ import { Project } from "./project";
 
 class Ui {
   constructor(project) {
+    this.project = project;
     this.showProject(project);
     this.showTasks(project);
+
+    const addButton = document.querySelector("#AddButton");
+    addButton.addEventListener("click", this, false);
   }
 
-  showProject(project) {
+  showProject() {
     const projDisp = document.querySelector("#project");
-    projDisp.textContent = project.getName();
+    projDisp.textContent = this.project.getName();
   }
 
-  showTasks(project) {
+  showTasks() {
     const taskDisp = document.querySelector("#tasks");
     taskDisp.innerHTML = "";
-    let taskList = project.getTaskList();
+    let taskList = this.project.getTaskList();
     const list = document.createElement("ul");
     taskDisp.appendChild(list);
     taskList.forEach((element) => {
@@ -29,27 +33,46 @@ class Ui {
       dueDiv.textContent = element.getDueDate();
       const priorityDiv = document.createElement("div");
       priorityDiv.textContent = element.getPriority();
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Delete";
+      delBtn.id = "DeleteButton";
+      delBtn.dataset.indexNumber = element.getId();
+      delBtn.addEventListener("click", this, false);
       task.appendChild(nameDiv);
       task.appendChild(descDiv);
       task.appendChild(dueDiv);
       task.appendChild(priorityDiv);
+      task.appendChild(delBtn);
       taskDisp.appendChild(task);
     });
   }
 
-  addTask(project) {
+  addTask() {
     const newName = document.querySelector("#task-input");
     const newDesc = document.querySelector("#task-description");
     const newDue = document.querySelector("#task-due");
     const newPriority = document.querySelector("#task-priority");
-    project.addTask(
+    this.project.addTask(
       new Task(newName.value, newDesc.value, newDue.value, newPriority.value),
     );
     newName.value = "";
     newDesc.value = "";
     newDue.value = "";
     newPriority.value = "Normal";
-    this.showTasks(project);
+  }
+
+  handleEvent(event) {
+    console.log("In handle event: " + event.target.id);
+    switch (event.target.id) {
+      case "AddButton":
+        this.addTask();
+        break;
+      case "DeleteButton":
+        console.log("Delete task " + event.target.dataset.indexNumber);
+        this.project.delTask(event.target.dataset.indexNumber);
+        break;
+    }
+    this.showTasks();
   }
 }
 export { Ui };
