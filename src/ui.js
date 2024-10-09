@@ -1,11 +1,12 @@
 import { Task } from "./task";
 import { Project } from "./project";
+import { storeData, loadData } from "./storage";
 
 class Ui {
   constructor() {
     this.project_list = [];
     this.current_project = 0;
-    this.addProject("Default");
+    /*
     this.getProject().addTask(
       new Task("task1", "description1", "01/01/2025", "normal"),
     );
@@ -14,9 +15,17 @@ class Ui {
     );
     this.getProject().addTask(
       new Task("task3", "description3", "01/01/2025", "normal"),
-    );
+    );*/
 
-    this.showTasks(this.getProject());
+    if (localStorage.getItem("projects")) {
+      this.project_list = loadData();
+    } else {
+      this.addProject("Default");
+    }
+
+    if (this.project_list.length > 0) {
+      this.showTasks(this.getProject());
+    }
 
     const addButton = document.querySelector("#AddButton");
     addButton.addEventListener("click", this, false);
@@ -24,12 +33,17 @@ class Ui {
     const addProjButton = document.querySelector("#AddProject");
     addProjButton.addEventListener("click", this, false);
 
+    const saveButton = document.querySelector("#SaveBtn");
+    saveButton.addEventListener("click", this, false);
+
     this.addProject("Project2");
     this.getProject().addTask(
       new Task("task1", "project2 description1", "01/01/2025", "normal"),
     );
+  }
 
-    console.log(JSON.stringify(this.project_list));
+  saveData() {
+    storeData(this.project_list);
   }
 
   addProject(name) {
@@ -45,11 +59,11 @@ class Ui {
   showTasks() {
     const taskDisp = document.querySelector("#tasks");
     taskDisp.innerHTML = "";
-    console.log("create project disp");
+
     const projDisp = document.createElement("h1");
-    console.log("projDisp: " + projDisp);
     projDisp.id = "project";
     projDisp.textContent = this.getProject().getName();
+
     taskDisp.appendChild(projDisp);
     let taskList = this.getProject().getTaskList();
     const list = document.createElement("ul");
@@ -106,6 +120,10 @@ class Ui {
       case "AddProject":
         const newProject = document.querySelector("#project-input");
         this.addProject(newProject.value);
+        break;
+      case "SaveBtn":
+        this.saveData();
+        break;
     }
     this.showTasks();
   }
