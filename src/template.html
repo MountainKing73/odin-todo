@@ -23,25 +23,28 @@
       <button id="AddProject">Add Project</button>
     </div>
     <div id="task-container">
-      <button id="AddButton">Add Task</button>
       <div id="tasks"></div>
+      <!--<button id="AddButton">Add Task</button>-->
+      <a id="AddButton" href="#">+ Add Task</a>
     </div>
     <div id="taskModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <div id="new-task">
-          <label for="task-input">Name</label>
-          <input type="text" id="task-input" placeholder="Add new task..." />
-          <label for="task-description">Description</label>
-          <input type="text" id="task-description" placeholder="" />
-          <label for="task-due">Due Date</label>
-          <input type="date" id="task-due" placeholder="01/01/2025" />
-          <label for="task-priority">Priority</label>
-          <select name="priority" id="task-priority">
-            <option value="High">High</option>
-            <option value="Normal" selected>Normal</option>
-            <option value="Low">Low</option>
-          </select>
+          <input type="text" id="task-input" placeholder="Task Name" />
+          <input type="text" id="task-description" placeholder="Description" />
+          <div id="due-date-div">
+            <label for="task-due">Due Date</label>
+            <input type="date" id="task-due" placeholder="01/01/2025" />
+          </div>
+          <div id="priority-div">
+            <label for="task-priority">Priority</label>
+            <select name="priority" id="task-priority">
+              <option value="High">High</option>
+              <option value="Normal" selected>Normal</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
           <button id="AddTask">Add Task</button>
         </div>
       </div>
